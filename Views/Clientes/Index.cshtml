@@ -1,0 +1,163 @@
+@model IEnumerable<SistemaFacturacion.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<h1>Clientes</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nuevo Cliente
+    </a>
+</p>
+
+<form asp-action="Index" method="get" class="mb-4">
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <label class="form-label">Estado</label>
+
+            <select name="filtroEstado" class="form-select">
+                @if (ViewBag.FiltroEstado == "Activos")
+                {
+                    <option value="Activos" selected>Activos</option>
+                }
+                else
+                {
+                    <option value="Activos">Activos</option>
+                }
+
+                @if (ViewBag.FiltroEstado == "Inactivos")
+                {
+                    <option value="Inactivos" selected>Inactivos</option>
+                }
+                else
+                {
+                    <option value="Inactivos">Inactivos</option>
+                }
+
+                @if (ViewBag.FiltroEstado == "Todos")
+                {
+                    <option value="Todos" selected>Todos</option>
+                }
+                else
+                {
+                    <option value="Todos">Todos</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-5">
+            <label class="form-label">Buscar cliente</label>
+
+            <input type="text"
+                   name="buscar"
+                   value="@ViewBag.Buscar"
+                   class="form-control"
+                   placeholder="Nombre del cliente..." />
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+
+            <button type="submit"
+                    class="btn btn-primary me-2">
+                Buscar
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Limpiar
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>CUIT</th>
+            <th>DNI</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var cliente in Model)
+        {
+            <tr>
+
+                <td>@cliente.Nombre</td>
+
+                <td>@cliente.CUIT</td>
+
+                <td>@cliente.DNI</td>
+
+                <td>@cliente.Telefono</td>
+
+                <td>@cliente.Email</td>
+
+                <td>
+                    @if (cliente.Activo == true)
+                    {
+                        <span class="text-success">
+                            Activo
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">
+                            Inactivo
+                        </span>
+                    }
+                </td>
+
+                <td>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@cliente.Id"
+                       class="btn btn-sm btn-warning">
+                        Editar
+                    </a>
+
+                    <a asp-action="Details"
+                       asp-route-id="@cliente.Id"
+                       class="btn btn-sm btn-info">
+                        Detalles
+                    </a>
+
+                    @if (cliente.Activo == true)
+                    {
+                        <a asp-action="Delete"
+                           asp-route-id="@cliente.Id"
+                           class="btn btn-sm btn-danger">
+                            Dar de baja
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Activar"
+                           asp-route-id="@cliente.Id"
+                           class="btn btn-sm btn-success">
+                            Dar de alta
+                        </a>
+                    }
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
